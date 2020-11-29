@@ -8,13 +8,9 @@ const PORT = process.env.PORT || 3000
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
-});
+require("./routes/htmlRoutes.js")(app);
 
-app.get("/notes", function(req, res){
-    res.sendFile(path.join(__dirname, "/public/notes.html"));
-});
+
 
 // app.get("/api/notes", function(req, res){
 
@@ -28,3 +24,7 @@ app.get("/notes", function(req, res){
 // app.delete("/api/notes", function(req, res){
 
 // });
+
+app.listen(PORT, function(){
+    console.log("start best server. Port:" + PORT);
+})
