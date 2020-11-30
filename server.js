@@ -1,30 +1,23 @@
+
+//dependencies
 const express = require("express");
-const path = require("path");
 
-
+//express setup
 const app = express();
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
+//express data parsing
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-require("./routes/htmlRoutes.js")(app);
+//access to webpages on server
+app.use(express.static(__dirname + '/public'))
 
+//call route 
+require("./routes/htmlRoutes")(app);
+require("./routes/apiRoutes")(app);
 
-
-// app.get("/api/notes", function(req, res){
-
-//     res.json()
-// });
-
-// app.post("/api/notes", function(req, res){
-
-// });
-
-// app.delete("/api/notes", function(req, res){
-
-// });
-
+//start responding to calls
 app.listen(PORT, function(){
     console.log("start best server. Port:" + PORT);
 })
