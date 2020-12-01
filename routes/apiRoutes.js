@@ -17,7 +17,7 @@ function setId(db){
 }
 
 module.exports = function(app) {
-    // api/notes: gets the notes for user
+    // api/notes: gets the notes from db for user
     app.get("/api/notes", function (req, res) {
         fs.readFile("./db/db.json", "utf8", function (err, data) {
             if (err) throw err;
@@ -27,6 +27,27 @@ module.exports = function(app) {
             let dbId = setId(db);
             //give front end the notes
             res.json(dbId);
+        });
+    });
+
+    // api/notes post pushes note to db and saves db
+    app.post("/api/notes", function(req, res){
+        //get input from request
+        let postedNote = { ...req.body };
+        //gets the db
+        fs.readFile("./db/db.json", "utf8", function (err, data) {
+            if (err) throw err;
+            let db = JSON.parse(data);
+            //add posted note to db
+            db.push(postedNote);
+            //give notes unique ID's
+            let dbId = setId(db);
+
+            //save changes to database
+            fs.writeFile("./db/db.json", JSON.stringify(dbId), function () {
+                console.log("Note Added");
+                return res.json(dbId);
+            });
         });
     });
 }
