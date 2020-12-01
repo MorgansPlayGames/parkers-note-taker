@@ -43,9 +43,26 @@ module.exports = function(app) {
             //give notes unique ID's
             let dbId = setId(db);
 
-            //save changes to database
+            //save changes to database and send them back.
             fs.writeFile("./db/db.json", JSON.stringify(dbId), function () {
                 console.log("Note Added");
+                return res.json(dbId);
+            });
+        });
+    });
+
+    app.delete("/api/notes/:id", function(req, res){
+        fs.readFile("./db/db.json", "utf8", function (err, data) {
+            if (err) throw err;
+            const db = JSON.parse(data);
+            //input value for note to delete
+            let index = req.params.id;
+            //delete this note
+            db.splice(index, 1);
+            dbId = setId(db);
+
+            //save changes and send them back.
+            fs.writeFile("./db/db.json", JSON.stringify(dbId), function () {
                 return res.json(dbId);
             });
         });
